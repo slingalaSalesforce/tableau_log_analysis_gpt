@@ -1,7 +1,3 @@
-Here’s your corrected and polished version for the GitHub README:
-
----
-
 # Tableau Log Analysis with Personalized Fine-tuned GPT Model
 
 This project is a log analyzer built with Flask, powered by a fine-tuned OpenAI GPT model.
@@ -64,12 +60,3 @@ You can configure your API key, upload your logs to the server, and the server w
 ### Further Development
 
 This is a basic setup for a Tableau log analysis tool. Future improvements can include building more sophisticated systems by fine-tuning OpenAI model parameters further or handling more complex log analysis tasks.
-
-## License
-
-`log_analysis_openai` is available under the MIT License. See [LICENSE](LICENSE) for more details.
-
----
-
-Would you also like me to help you polish the **fine_tune.py** or **start.py** documentation too if you're planning to include that later? 🚀  
-(Helps make it a perfect repo!)
