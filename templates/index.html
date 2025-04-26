@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ChatGPT Agents</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet" />
+
+  <!-- SLDS CSS (Optional) -->
+  <link rel="stylesheet" href="https://www.lightningdesignsystem.com/assets/styles/salesforce-lightning-design-system.min.css" />
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: linear-gradient(135deg, #eef4ff, #d5dff5);
+      margin: 0;
+      padding: 0;
+      color: #0a2342;
+    }
+
+    .hero-section {
+      text-align: center;
+      padding: 30px 10px 10px;
+    }
+
+    .hero-image {
+      width: 120px;
+      height: auto;
+    }
+
+    h1 {
+      font-size: 2em;
+      margin: 10px 0;
+    }
+
+    h1 .highlight {
+      color: #0057ff;
+    }
+
+    form, p, #uploadMessage {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 5px 10px;
+      text-align: center;
+    }
+
+    input[type="file"] {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      padding: 10px 15px;
+      background-color: #0070d2; /* Salesforce Agentforce Blue */
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.2s ease-in-out;
+    }
+
+    button:hover {
+      background-color: #005fb2; /* Darker Salesforce Blue on hover */
+    }
+
+  #conversation {
+      width: 100%;
+      max-width: 900px;
+      height: 425px; /* Increased from 350px to 500px */
+      margin: 15px auto;
+      padding: 15px; /* Slightly increased padding */
+      background: white;
+      border: 1px solid #ccc;
+      overflow-y: auto;
+      border-radius: 6px; /* Slightly softer corners */
+      font-size: 1em; /* Slightly bigger text for better readability */
+    }
+
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      padding: 10px;
+    }
+
+    .btn {
+      flex: 1 1 220px;
+      max-width: 220px;
+    }
+
+    #message-form {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      padding: 10px;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    #user-input {
+      flex: 1 1 100%;
+      padding: 8px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+
+    #message-form button {
+      min-width: 70px;
+    }
+
+    @media (min-width: 600px) {
+      #user-input {
+        flex: 1 1 auto;
+      }
+
+      #message-form {
+        flex-wrap: nowrap;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="hero-section">
+    <img src="https://help.salesforce.com/resource/1733538286000/HTCommunityCustomImages/png/agentforce-agent-astro.png" alt="Agentforce Bot" class="hero-image" />
+    <h1>How can <span class="highlight">Tableau Agentforce</span> help?</h1>
+  </div>
+
+  <p>Click on the "Choose File" button to upload a file:</p>
+
+  <form id="uploadForm" enctype="multipart/form-data">
+    <input type="file" id="fileInput" name="file" />
+    <button type="submit">Upload</button>
+  </form>
+
+  <div id="uploadMessage" style="display: none;"></div>
+  <div id="conversation"></div>
+
+  <div class="row">
+    <button class="btn" id="button1">Analyze CPU Usage</button>
+    <button class="btn" id="button2">Analyze Memory Usage</button>
+    <button class="btn" id="button3">Analyze Errors</button>
+    <button class="btn" id="button4">Check Sensitive Data</button>
+  </div>
+
+  <form id="message-form">
+    <input type="text" id="user-input" name="user_input" placeholder="Type your message..." />
+    <button type="submit">Send</button>
+  </form>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('#config-form').on('submit', function (e) {
+        e.preventDefault();
+        let formData = $(this).serialize();
+        $.ajax({
+          url: '/config',
+          method: 'POST',
+          data: formData,
+          success: function (data) {
+            if (data.success) {
+              alert('Configuration saved successfully.');
+              $('#message-form').show();
+            } else {
+              alert('An error occurred while saving the configuration.');
+            }
+          },
+          error: function () {
+            alert('An error occurred while saving the configuration.');
+          }
+        });
+      });
+
+      $('#uploadForm').on('submit', function (event) {
+        event.preventDefault();
+        var formData = new FormData($(this)[0]);
+        $.ajax({
+          url: '/upload',
+          type: 'POST',
+          data: formData,
+          contentType: false,
+          processData: false,
+          success: function (response) {
+            if (response.success) {
+              $('#uploadMessage').text('File uploaded successfully!').css('color', 'green').show();
+            } else {
+              $('#uploadMessage').text('File upload failed. Please try again.').css('color', 'red').show();
+            }
+          },
+          error: function (xhr, status, error) {
+            console.error("Error:", error);
+            $('#uploadMessage').text('An error occurred while uploading the file.').css('color', 'red').show();
+          }
+        });
+      });
+
+      $("#button1").click(function(){
+       var prompt = "Analyze CPU usage in the log file. Focus on:<br>" +
+        "1. Trends: Identify patterns or events with high CPU usage.<br>" +
+        "2. Correlations: Link CPU usage to event characteristics (e.g., duration, type).<br>" +
+        "3. Intensive Events: Highlight events needing optimization.<br>" +
+        "4. Recommendations: Suggest CPU optimization strategies (e.g., load balancing).";
+        var displayContent = "Analyze CPU Usage";
+        sendMessage(prompt, displayContent);
+      });
+
+      $("#button2").click(function(){
+       var prompt = "Analyze memory usage in the log file. Focus on:<br>" +
+        "1. Trends: Identify patterns or events with high memory usage.<br>" +
+        "2. Correlations: Link memory usage to event characteristics (e.g., duration, type).<br>" +
+        "3. Intensive Events: Highlight events needing optimization.<br>" +
+        "4. Recommendations: Suggest memory optimization strategies (e.g., management techniques).";
+      var displayContent = "Analyze Memory Usage";
+      sendMessage(prompt, displayContent);
+      });
+
+      $("#button3").click(function(){
+        var prompt = "Analyze exceptions and errors in the log file (exclude N/A or empty errors). For each, provide:<br>" +
+        "1. Details: Event ID, timestamp, error message.<br>" +
+        "2. Types: Classify as syntax, runtime, or resource errors.<br>" +
+        "3. Root Causes: Identify causes (e.g., code, configuration).<br>" +
+        "4. Recommendations: Suggest fixes to prevent recurrence.";
+        var displayContent = "Analyze Errors";
+        sendMessage(prompt, displayContent);
+      });
+
+      $("#button4").click(function(){
+      var prompt = "Check the log file for personally identifiable information (PII), including names, emails, phone numbers, SSNs, addresses, or credit card numbers.<br>" +
+        "Highlight any PII found and recommend handling or redaction steps.";
+      var displayContent = "Check Sensitive Data";
+      sendMessage(prompt, displayContent);
+      });
+
+      // Form submission for text input (Send button)
+      $('#message-form').on('submit', function (e) {
+        e.preventDefault();
+        let userInput = $('#user-input').val().trim();
+        if (!userInput) return;
+        sendMessage(userInput, userInput);
+        $('#user-input').val('');
+      });
+
+      function sendMessage(content, displayContent) {
+        var postData = {
+          content: content,
+          displayContent: displayContent
+        };
+
+        $('#conversation').append('<p><strong>User</strong> <br>' + postData.displayContent + '</p>');
+
+        $.ajax({
+          method: 'POST',
+          url: "/message",
+          data: JSON.stringify(postData),
+          contentType: "application/json",
+          success: function (data) {
+            let response = data.response;
+            var str1 = response.replace(/\\n/g, '<br>');
+            var formattedString = str1.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            $('#conversation').append('<p><strong>Agent </strong> <br>' + formattedString + '</p><br>');
+            let conversationDiv = document.getElementById('conversation');
+            conversationDiv.scrollTop = conversationDiv.scrollHeight;
+          },
+          error: function (xhr, status, error) {
+            console.error("Error sending message:", error);
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>
