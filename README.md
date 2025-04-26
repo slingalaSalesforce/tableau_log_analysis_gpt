@@ -1,13 +1,16 @@
+Here’s your corrected and polished version for the GitHub README:
 
-# Analyze Logs with Fine-tuned GPT Model
+---
 
-This project is a log analyzer built on Flask, powered by the fined-tune OpenAI GPT model.
+# Tableau Log Analysis with Personalized Fine-tuned GPT Model
 
-You can config your API key, and upload your logs to the server, and then server will use the OpenAI to analyze the logs and provide suggestions about the root cause of any identified issues.
+This project is a log analyzer built with Flask, powered by a fine-tuned OpenAI GPT model.
 
-## How it works
+You can configure your API key, upload your logs to the server, and the server will use OpenAI to analyze the logs and provide suggestions about the root cause of any identified issues.
 
-![alt text](https://github.com/liyunbao/log_analysis_openai/blob/main/static/img/Log_Analysis_Finetune.png)
+## How It Works
+
+![Log Analysis Overview]()
 
 ### Prerequisites
 
@@ -17,44 +20,56 @@ You can config your API key, and upload your logs to the server, and then server
 ### Installation
 
 1. Clone the repository to your local machine:
-       
-        git@github.com:liyunbao/log_analysis_openai.git
-        cd log_analysis_openai
 
-2. Install the required Python packages using pip:
+    ```bash
+    git clone git@github.com:slingalaSalesforce/tableau_log_analysis_gpt.git
+    cd tableau_log_analysis_gpt
+    ```
 
-        pip install -r requirements.txt
+2. Install the required Python packages:
 
-      Note: If you have both Python 2 and Python 3 installed on your machine, you may need to use `pip3` instead of `pip`.
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-      The `requirements.txt` file includes the following packages:
+    > **Note:** If you have both Python 2 and Python 3 installed, you may need to use `pip3` instead of `pip`.
 
-      - flask
-      - openai
+    The `requirements.txt` file includes:
 
-      Note: The code works with OpenAI SDK Version: 1.72.0. If the request to OpenAI is failed it may be caused by the SDK version is too old, use `pip show openai` to check the version.
+    - `flask`
+    - `openai`
+
+    > **Important:** This project is compatible with OpenAI SDK version `1.72.0`. If requests to OpenAI fail, it may be due to an outdated SDK version. Use `pip show openai` to check your installed version.
+
+3. Fine-tune your model:
    
-3. Fine Tune your model
-      Follow the steps in fine_tune.py to training the GPT model with your training data
+    Follow the instructions in `fine_tune.py` to train the GPT model with your custom training data.
 
 4. Run the application:
-      After your model is finished training, OpenAI will give you a model id. Use this id in start.py and run
 
-        python start.py
+    After your model has been successfully trained, OpenAI will provide you with a model ID. Update `start.py` with your model ID, and then run:
 
-      Note: You may need to use `python3` instead of `python`, depending on your setup.
+    ```bash
+    python start.py
+    ```
 
-5. Open this link in browser http://localhost:5000/
+    > **Note:** You may need to use `python3` depending on your system setup.
 
-      Upload your log file, you could select the pre-defined options, or input the questions and click Send button. Your question and the response from GPT will show up in the message form.
-![alt text](https://github.com/liyunbao/log_analysis_openai/blob/main/static/img/tool_ui.png)
+5. Open your browser and navigate to [http://localhost:5000/](http://localhost:5000/).
 
+    Upload your log file, select one of the predefined options, or input your own question. Click the **Send** button. Your question and GPT's response will be displayed in the message form.
+
+    ![Tool UI](https://github.com/slingalaSalesforce/tableau_log_analysis_gpt/blob/main/static/img/Tool%20GUI.png)
 
 ### Further Development
 
-This is a basic setup for a log analysis tool. We can build more sophisticated system by fine-tuning the OpenAI model parameters, or handling more complex log analysis tasks.
+This is a basic setup for a Tableau log analysis tool. Future improvements can include building more sophisticated systems by fine-tuning OpenAI model parameters further or handling more complex log analysis tasks.
 
 ## License
-log_analysis_openai is available under the MIT license. For more details see LICENSE.
 
+`log_analysis_openai` is available under the MIT License. See [LICENSE](LICENSE) for more details.
 
+---
+
+Would you also like me to help you polish the **fine_tune.py** or **start.py** documentation too if you're planning to include that later? 🚀  
+(Helps make it a perfect repo!)
