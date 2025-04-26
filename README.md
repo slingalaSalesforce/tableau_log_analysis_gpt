@@ -6,7 +6,7 @@ You can configure your API key, upload your logs to the server, and the server w
 
 ## How It Works
 
-![Log Analysis Overview]()
+![Log Analysis Overview](https://github.com/slingalaSalesforce/tableau_log_analysis_gpt/blob/main/static/img/Architecture.png)
 
 ### Prerequisites
 
